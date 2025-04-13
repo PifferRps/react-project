@@ -1,6 +1,7 @@
 import { Head, Link, usePage } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
+import ActionsDropdown from '@/components/table/ActionsDropdown';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: '/dashboard' },
@@ -14,6 +15,7 @@ export default function Index() {
             links: any[];
         };
     };
+
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -69,20 +71,11 @@ export default function Index() {
                                         {employee.active ? 'Ativo' : 'Inativo'}
                                     </span>
 
-                                    <div className="flex gap-2">
-                                        <Link href={route('admin.employees.edit', employee.id)} title="Editar">
-                                            <i className="fas fa-pen text-blue-500 hover:text-blue-700" />
-                                        </Link>
-                                        <Link
-                                            href={route('admin.employees.destroy', employee.id)}
-                                            method="delete"
-                                            as="button"
-                                            className="text-red-500 hover:text-red-700"
-                                            title="Excluir"
-                                        >
-                                            <i className="fas fa-trash" />
-                                        </Link>
-                                    </div>
+                                    <ActionsDropdown
+                                        editUrl={route('admin.employees.edit', employee.id)}
+                                        deleteUrl={route('admin.employees.destroy', employee.id)}
+                                    />
+
                                 </div>
                             </div>
                         </li>

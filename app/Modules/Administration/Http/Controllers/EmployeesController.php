@@ -77,7 +77,9 @@ class EmployeesController extends Controller
     {
         $employee = Employee::with('user')->findOrFail($id);
 
-        return view('Administration::employees.edit', compact('employee'));
+        return Inertia::render('Administration/Employees/Edit', [
+            'employee' => $employee,
+        ]);
     }
 
 
