@@ -1,0 +1,139 @@
+services:
+    php:
+        build:
+            context: .docker/php_re/
+            args:
+                uid: 1000
+            dockerfile: Dockerfile
+        volumes:
+            - ./:/var/www/
+        ports:
+            - "80:80"
+            - "443:443"
+        container_name: php_re
+        depends_on:
+            - mysql
+            - phpmyadmin
+        working_dir: /var/www
+        restart: always
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
+        networks:
+            - re
+    #    worker:
+    #        build:
+    #            context: .docker/worker
+    #            args:
+    #                uid: 1000
+    #        volumes:
+    #            - ./:/var/www/
+    #        depends_on:
+    #            - mysql
+    #            - redis
+    #        working_dir: /var/www
+    #        restart: always
+    #        extra_hosts:
+    #            - "host.docker.internal:host-gateway"
+    #        networks:
+    #            - gs
+
+    mysql:
+        image: mysql:8.0
+        restart: unless-stopped
+        container_name: projeto-re-mysql
+        environment:
+            MYSQL_ALLOW_EMPTY_PASSWORD: 1
+            MYSQL_ROOT_HOST: '%'
+            MYSQL_DATABASE: superadmin
+        ports:
+            - "3306:3306"
+        volumes:
+            - 'mysql:/var/lib/mysql'
+        networks:
+            - re
+
+    #        healthcheck:
+    #            test:
+    #                - CMD
+    #                - mysqladmin
+    #                - ping
+    #                - '-p${DB_PASSWORD}'
+    #            retries: 3
+    #            timeout: 5s
+
+    #    mysql_testing:
+    #        image: 'mysql/mysql-server:8.0'
+    #        env_file:
+    #            - .env.testing
+    #        tmpfs: /var/lib/mysql
+    #        ports:
+    #            - '3307:3306'
+    #        restart: always
+    #        environment:
+    #            MYSQL_ROOT_PASSWORD: ''
+    #            MYSQL_ROOT_HOST: '%'
+    #            MYSQL_DATABASE: 'superadmin_testing'
+    #            MYSQL_USER: 'gestor'
+
+#            MYSQL_PASSWORD: 'gestor'
+#            MYSQL_ALLOW_EMPTY_PASSWORD: 1
+#        volumes:
+#            - 'mysql_testing:/var/lib/mysql'
+#        networks:
+#            - gs
+#        healthcheck:
+#            test:
+#                - CMD
+#                - mysqladmin
+#                - ping
+#                - '-pgestor'
+#            retries: 3
+#            timeout: 5s
+
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        ports:
+            - "8080:80"
+        environment:
+            PMA_HOST: mysql
+        depends_on:
+            - mysql
+        container_name: phpmyadmin_re
+        restart: always
+        networks:
+            - re
+
+#    redis:
+#        image: redis
+#        container_name: "redis"
+#        command: [ "redis-server", "--bind", "redis", "--port", "6379" ]
+#        restart: "always"
+#        volumes:
+#            - redis:/data
+#        ports:
+#            - "6379:6379"
+#        networks:
+#            - ap
+
+#    mailhog:
+#        image: mailhog/mailhog
+#        container_name: "mailhog_ap"
+#        logging:
+#            driver: "none"
+#        ports:
+#            - 1025:1025
+#            - 8025:8025
+#        networks:
+#            - ap
+
+networks:
+    re:
+        driver: bridge
+volumes:
+    #    mysql_testing:
+    #        driver: local
+    mysql:
+        driver: local
+#    redis:
+#        driver: local
+
