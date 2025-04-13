@@ -43,7 +43,6 @@ export default function EmployeeForm({ employee, method, action, buttonLabel = '
                     required
                     error={errors.name}
                 />
-
                 <InputText
                     label="E-mail"
                     name="email"

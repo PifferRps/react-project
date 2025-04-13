@@ -1,8 +1,11 @@
+// components/form/InputText.tsx
 import React from 'react';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 interface Props {
-    label: string;
     name: string;
+    label: string;
     value: string;
     onChange: (value: string) => void;
     type?: string;
@@ -12,30 +15,28 @@ interface Props {
 }
 
 export default function InputText({
-                                      label,
                                       name,
+                                      label,
                                       value,
                                       onChange,
                                       type = 'text',
-                                      required = false,
+                                      required,
                                       error,
                                       className = '',
                                   }: Props) {
     return (
-        <div className={className}>
-            <label htmlFor={name} className="block text-sm font-medium text-gray-700 mb-1">
-                {label}
-            </label>
-            <input
+        <div className={`space-y-1 ${className}`}>
+            <Label htmlFor={name}>{label}</Label>
+            <Input
                 id={name}
                 name={name}
                 type={type}
-                required={required}
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
-                className="w-full rounded-lg border border-gray-300 p-2.5 text-sm"
+                required={required}
+                aria-invalid={!!error}
             />
-            {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+            {error && <p className="text-sm text-red-600">{error}</p>}
         </div>
     );
 }
