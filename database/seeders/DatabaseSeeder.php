@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Tenant;
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,11 +13,27 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        $tenant = Tenant::create([
+            'id' => 'loja',
         ]);
+
+        $admin = User::factory()->create([
+            'name' => 'Admin User',
+            'email' => 'admin@admin.com',
+        ]);
+
+        $others = User::factory(4)->create();
+
+        $tenant->users()->attach($admin->id, [
+            'role' => 'superadmin',
+            'is_active' => true,
+        ]);
+
+        foreach ($others as $user) {
+            $tenant->users()->attach($user->id, [
+                'role' => 'user',
+                'is_active' => true,
+            ]);
+        }
     }
 }
