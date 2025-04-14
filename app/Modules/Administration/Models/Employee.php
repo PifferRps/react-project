@@ -1,5 +1,6 @@
 <?php
 
+
 namespace App\Modules\Administration\Models;
 
 use App\Models\User;
@@ -33,7 +34,7 @@ class Employee extends Model
 
     public function teams(): BelongsToMany
     {
-        return $this->belongsToMany(Team::class, 'employee_team');
+        return $this->belongsToMany(\App\Modules\Administration\Models\Team::class, 'employee_team');
     }
 
     public static function factory(): EmployeeFactory

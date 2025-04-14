@@ -4,6 +4,16 @@ import { type BreadcrumbItem } from '@/types';
 import TeamForm from './TeamForm';
 import { Users2 } from 'lucide-react';
 import TabsNav from '@/components/tabs/TabsNav';
+import FormCard from '@/components/form/FormCard';
+
+interface EditTeamPageProps extends Record<string, unknown> {
+    team: {
+        id: number;
+        name?: string;
+        description?: string;
+        active: boolean;
+    };
+}
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: '/dashboard' },
@@ -12,7 +22,8 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Edit() {
-    const { team } = usePage().props as { team: any };
+
+    const { team } = usePage<EditTeamPageProps>().props;
 
     const tabs = [
         {
@@ -31,23 +42,20 @@ export default function Edit() {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Editar Equipe" />
 
-            {/* Abas no topo */}
+            {/* Abas para a navegação específica da tela de equipe */}
             <TabsNav tabs={tabs} className="mb-4" />
 
-            {/* Formulário da equipe */}
-            <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
-                <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-white flex items-center gap-2">
-                    <Users2 className="text-indigo-500 w-5 h-5" />
-                    Editar Equipe
-                </h2>
-
+            <FormCard
+                title="Editar Equipe"
+                icon={<Users2 className="text-indigo-500 w-5 h-5" />}
+            >
                 <TeamForm
                     method="put"
                     action={route('admin.teams.update', team.id)}
                     team={team}
                     buttonLabel="Salvar"
                 />
-            </div>
+            </FormCard>
         </AppLayout>
     );
 }

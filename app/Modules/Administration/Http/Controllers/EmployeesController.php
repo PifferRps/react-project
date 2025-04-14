@@ -10,27 +10,39 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class EmployeesController extends Controller
 {
-    public function index()
+    public function index(Request $request): Response
     {
-        $userIds = tenant()->users()->pluck('users.id');
+        $search = $request->input('search');
 
-        $employees = Employee::with('user')
+        $userIds = tenant()->users()
+            ->when($search, fn($q) =>
+            $q->where(function ($query) use ($search) {
+                $query->where('name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%");
+            })
+            )
+            ->pluck('users.id');
+
+        $employees = Employee::query()
             ->whereIn('user_id', $userIds)
-            ->latest()
+            ->with('user')
             ->paginate(10);
+
 
         return Inertia::render('Administration/Employees/Index', [
             'employees' => $employees,
+            'filters' => ['search' => $search],
         ]);
     }
 
 
     public function create()
     {
-     return Inertia::render('Administration/Employees/Create');
+        return Inertia::render('Administration/Employees/Create');
 
     }
 

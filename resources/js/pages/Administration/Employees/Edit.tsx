@@ -1,7 +1,20 @@
-import { Head, usePage } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
+import { Head, usePage } from '@inertiajs/react';
 import EmployeeForm from './EmployeeForm';
+import FormCard from '@/components/form/FormCard';
+
+interface EditEmployeePageProps extends Record<string, unknown> {
+    employee: {
+        id: number;
+        user?: {
+            name?: string;
+            email?: string;
+        };
+        city?: string;
+        active: boolean;
+    };
+}
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: '/dashboard' },
@@ -10,25 +23,14 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Edit() {
-    const { employee } = usePage().props as { employee: any };
+    const { employee } = usePage<EditEmployeePageProps>().props;
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Editar Colaborador" />
-
-            <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
-                <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-white flex items-center gap-2">
-                    <i className="fas fa-user-edit text-indigo-500"></i>
-                    Editar Colaborador
-                </h2>
-
-                <EmployeeForm
-                    method="put"
-                    action={route('admin.employees.update', employee.id)}
-                    employee={employee}
-                    buttonLabel="Salvar"
-                />
-            </div>
+            <FormCard title="Editar Colaborador" icon={<i className="fas fa-user-edit text-indigo-500"></i>}>
+                <EmployeeForm method="put" action={route('admin.employees.update', employee.id)} employee={employee} buttonLabel="Salvar" />
+            </FormCard>
         </AppLayout>
     );
 }

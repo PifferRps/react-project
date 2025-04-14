@@ -4,8 +4,23 @@ import InputText from '@/components/form/InputText';
 import InputMask from '@/components/form/InputMask';
 import InputDate from '@/components/form/InputDate';
 
+interface Employee {
+    user?: {
+        name?: string;
+        email?: string;
+    };
+    cpf?: string;
+    phone?: string;
+    hire_date?: string;
+    termination_date?: string;
+    postal_code?: string;
+    city?: string;
+    street_address?: string;
+    neighborhood?: string;
+}
+
 interface Props {
-    employee?: Record<string, any>;
+    employee?: Employee;
     method: 'post' | 'put';
     action: string;
     buttonLabel?: string;
@@ -29,7 +44,11 @@ export default function EmployeeForm({ employee, method, action, buttonLabel = '
 
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
-        method === 'post' ? post(action) : put(action);
+        if (method === 'post') {
+            post(action)
+        } else {
+            put(action)
+        }
     };
 
     return (

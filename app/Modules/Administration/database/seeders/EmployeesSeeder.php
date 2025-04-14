@@ -2,9 +2,9 @@
 
 namespace App\Modules\Administration\database\seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Modules\Administration\Models\Employee;
+use Illuminate\Database\Seeder;
 
 class EmployeesSeeder extends Seeder
 {

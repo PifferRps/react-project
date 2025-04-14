@@ -9,18 +9,24 @@ use App\Modules\Administration\Models\Employee;
 use App\Modules\Administration\Models\Team;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class TeamsController extends Controller
 {
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        $teams = Team::latest()->paginate(10);
+        $search = $request->input('search');
+
+        $teams = Team::latest()->when($search, fn($q) =>
+        $q->where(function ($query) use ($search) {
+            $query->where('name', 'like', "%{$search}%");
+        })
+        )->paginate(10);
 
         return Inertia::render('Administration/Teams/Index', [
             'teams' => $teams,
+            'filters' => ['search' => $search],
         ]);
     }
 
@@ -114,8 +120,7 @@ class TeamsController extends Controller
         $team->employees()->detach($employeeId);
 
         return redirect()
-            ->route('admin.teams.employees', $teamId)
-            ->with('success', 'Colaborador removido com sucesso!');
+            ->route('admin.teams.employees', $teamId);
     }
 
 

@@ -10,7 +10,7 @@ interface AppLayoutProps {
 
 export default ({ children, breadcrumbs, ...props }: AppLayoutProps) => (
     <AppLayoutTemplate breadcrumbs={breadcrumbs} {...props}>
-        <FlashMessages /> {/* 👈 mostra alerta antes dos children */}
+        <FlashMessages />
         {children}
     </AppLayoutTemplate>
 );

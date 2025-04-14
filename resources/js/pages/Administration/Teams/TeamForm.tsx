@@ -2,11 +2,13 @@ import React from 'react';
 import { useForm } from '@inertiajs/react';
 import InputText from '@/components/form/InputText';
 
+interface Team {
+    name?: string;
+    description?: string;
+}
+
 interface Props {
-    team?: {
-        name?: string;
-        description?: string;
-    };
+    team?: Team;
     method: 'post' | 'put';
     action: string;
     buttonLabel?: string;
@@ -20,7 +22,11 @@ export default function TeamForm({ team, method, action, buttonLabel = 'Salvar' 
 
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
-        method === 'post' ? post(action) : put(action);
+        if (method === 'post') {
+            post(action);
+        } else {
+            put(action);
+        }
     };
 
     return (
@@ -32,7 +38,6 @@ export default function TeamForm({ team, method, action, buttonLabel = 'Salvar' 
                     value={data.name}
                     onChange={(val) => setData('name', val)}
                     required
-                    maxLength={100}
                     error={errors.name}
                 />
 
@@ -42,7 +47,6 @@ export default function TeamForm({ team, method, action, buttonLabel = 'Salvar' 
                     value={data.description}
                     onChange={(val) => setData('description', val)}
                     required
-                    maxLength={150}
                     error={errors.description}
                 />
             </div>
