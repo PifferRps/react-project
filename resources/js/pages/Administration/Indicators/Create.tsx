@@ -1,7 +1,7 @@
 import { Head } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import EmployeeForm from './EmployeeForm';
+import IndicatorForm from './IndicatorForm';
 import FormCard from '@/components/form/FormCard';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -14,12 +14,11 @@ export default function Create() {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <FormCard
-                title="Cadastro de Colaboradores"
-                icon={<i className="fas fa-user-plus text-indigo-500"></i>}
+                title="Cadastro de Indicadores"
             >
-                <EmployeeForm
+                <IndicatorForm
                     method="post"
-                    action={route('admin.employees.store')}
+                    action={route('admin.indicators.store')}
                     buttonLabel="Criar"
                 />
             </FormCard>

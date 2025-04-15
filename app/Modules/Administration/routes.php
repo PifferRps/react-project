@@ -1,6 +1,7 @@
 <?php
 
 use App\Modules\Administration\Http\Controllers\EmployeesController;
+use App\Modules\Administration\Http\Controllers\IndicatorsController;
 use App\Modules\Administration\Http\Controllers\TeamsController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,16 +16,15 @@ Route::middleware(['web', 'auth', 'tenant', 'verified'])->prefix('administracao'
     Route::resource('equipes', TeamsController::class)
         ->names('teams')
         ->parameters(['equipes' => 'team']);
-
-    // Tela de gerenciamento de colaboradores da equipe
     Route::get('equipes/{team}/colaboradores', [TeamsController::class, 'colaboradores'])
         ->name('teams.employees');
-
-    // Nova rota: adicionar colaboradores à equipe (POST)
     Route::post('equipes/{team}/colaboradores/adicionar', [TeamsController::class, 'addEmployees'])
         ->name('teams.employees.add');
-
-    // Nova rota: remover colaborador específico da equipe (POST)
     Route::post('equipes/{team}/colaboradores/{employee}/remover', [TeamsController::class, 'removeEmployee'])
         ->name('teams.employees.remove');
+
+    // CRUD de Indicadores
+    Route::resource('indicadores', IndicatorsController::class)
+        ->names('indicators')
+        ->parameters(['indicador' => 'indicator']);
 });

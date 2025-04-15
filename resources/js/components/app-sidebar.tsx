@@ -7,7 +7,7 @@ import {
     SidebarHeader,
     SidebarMenu,
     SidebarMenuButton,
-    SidebarMenuItem,
+    SidebarMenuItem
 } from '@/components/ui/sidebar';
 
 import {
@@ -16,7 +16,7 @@ import {
     BookOpen,
     Users,
     Users2,
-    ChevronDown,
+    ChevronDown, Gauge
 } from 'lucide-react';
 import AppLogo from './app-logo';
 import { NavFooter } from '@/components/nav-footer';
@@ -45,7 +45,15 @@ export function AppSidebar() {
                             <span>Equipes</span>
                         </Link>
                     </SidebarMenuButton>
-                </SidebarMenuItem>
+
+                </SidebarMenuItem><SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                    <Link href={route('admin.indicators.index')}>
+                        <Gauge className="h-4 w-4" />
+                        <span>Indicadores</span>
+                    </Link>
+                </SidebarMenuButton>
+            </SidebarMenuItem>
             </>
         );
     }
@@ -97,13 +105,13 @@ export function AppSidebar() {
                         {
                             title: 'Repository',
                             href: 'https://github.com/laravel/react-starter-kit',
-                            icon: Folder,
+                            icon: Folder
                         },
                         {
                             title: 'Documentation',
                             href: 'https://laravel.com/docs/starter-kits',
-                            icon: BookOpen,
-                        },
+                            icon: BookOpen
+                        }
                     ]}
                     className="mt-auto"
                 />

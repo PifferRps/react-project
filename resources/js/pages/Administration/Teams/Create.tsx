@@ -12,7 +12,6 @@ const breadcrumbs: BreadcrumbItem[] = [
 export default function Create() {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Cadastro de Equipes" />
             <FormCard title="Cadastro de Equipes">
                 <TeamForm
                     method="post"
